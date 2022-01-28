@@ -14,11 +14,11 @@
     "keywords": [
         "Laravel",
         "OrchidTables",
-        "orchid"
+        "Orchid Platform"
     ],
     "require": {
-        "illuminate/support": "<=7.0",
-        "php": "^7.4 || ^8.0",
+        "php": "^8.0",
+        "illuminate/support": "^8.0",
         "orchid/platform": "^10.0"
     },
     "require-dev": {
