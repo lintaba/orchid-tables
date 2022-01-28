@@ -4,6 +4,7 @@
 [![Total Downloads][ico-downloads]][link-downloads]
 [![Build Status][ico-travis]][link-travis]
 [![StyleCI][ico-styleci]][link-styleci]
+[![PHP Composer](https://github.com/lintaba/orchid-tables/actions/workflows/php.yml/badge.svg)](https://github.com/lintaba/orchid-tables/actions/workflows/php.yml)
 
 An opinionated extension package for [Laravel Orchid](orchid) to extend its table handling capabilities, and some
 further useful helper methods.
