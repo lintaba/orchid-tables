@@ -31,7 +31,7 @@
             "Lintaba\\OrchidTables\\Tests\\": "tests"
         }
     },
-    "suggests": {
+    "suggest": {
         "maatwebsite/excel": "*"
     },
     "extra": {
