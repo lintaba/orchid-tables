@@ -1,0 +1,47 @@
+{
+    "name": "lintaba/orchid-tables",
+    "description": "An opinionated extension package for Laravel Orchid to extend its table handling capabilities, and some further useful helper methods.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "lintaba"
+        }
+    ],
+    "homepage": "https://github.com/lintaba/orchid-tables",
+    "keywords": [
+        "Laravel",
+        "OrchidTables"
+    ],
+    "require": {
+        "illuminate/support": "~7|~8",
+        "php": "~7.4|8.*"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest",
+        "phpunit/phpunit": "~9.0",
+        "orchestra/testbench": "~5|~6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Lintaba\\OrchidTables\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Lintaba\\OrchidTables\\Tests\\": "tests"
+        }
+    },
+    "suggests": {
+        "maatwebsite/excel": "*"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Lintaba\\OrchidTables\\OrchidTablesServiceProvider"
+            ],
+            "aliases": {
+                "OrchidTables": "Lintaba\\OrchidTables\\Facades\\OrchidTables"
+            }
+        }
+    }
+}
