@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Lintaba\OrchidTables\Mixins;
 
@@ -10,7 +12,7 @@ class LayoutMixin
     public static function html(): callable
     {
         return function (string $content) {
-            return new class($content) extends Layout {
+            return new class ($content) extends Layout {
                 public $content;
 
                 public function __construct($content)

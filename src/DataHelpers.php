@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Lintaba\OrchidTables;
 
@@ -50,8 +52,11 @@ class DataHelpers
 
         return collect($permissions)->flatten()->some(function ($permission) use ($user, $availablePermissions) {
             if (config('app.debug')) {
-                throw_unless($availablePermissions->contains($permission), UnknownPermissionException::class,
-                    $permission);
+                throw_unless(
+                    $availablePermissions->contains($permission),
+                    UnknownPermissionException::class,
+                    $permission
+                );
             }
 
             return $user->hasAccess($permission);
@@ -68,8 +73,11 @@ class DataHelpers
 
         return collect($permissions)->flatten()->every(function ($permission) use ($user, $availablePermissions) {
             if (config('app.debug')) {
-                throw_unless($availablePermissions->contains($permission), UnknownPermissionException::class,
-                    $permission);
+                throw_unless(
+                    $availablePermissions->contains($permission),
+                    UnknownPermissionException::class,
+                    $permission
+                );
             }
 
             return $user->hasAccess($permission);

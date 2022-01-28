@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Lintaba\OrchidTables\Mixins;
 
@@ -43,7 +45,18 @@ class CellExportFormattableMixin extends CellMixin
             $this->setStyle(function ($datum) use ($suffix, $decimals) {
                 $dec = $decimals > 0 ? ',' . str_repeat('#', $decimals) : '';
 
-                return ['numberFormat' => ['formatCode' => '#' . $dec . '" ' . $suffix . '";(-#' . $dec . '" ' . $suffix . '");0" ' . $suffix . '"']];
+                return [
+                    'numberFormat' => [
+                        'formatCode' => sprintf(
+                            "#%s\" %s\";(-#%s\" %s\");0\" %s\"",
+                            $dec,
+                            $suffix,
+                            $dec,
+                            $suffix,
+                            $suffix
+                        ),
+                    ],
+                ];
             });
 
             return CellMixin::num()->call($this, ...func_get_args());
@@ -81,9 +94,7 @@ class CellExportFormattableMixin extends CellMixin
 
     public static function getStyle(): callable
     {
-
         return function ($value) {
-
             /** @var Cell $this */
             $acc = [];
             foreach ($this->excelStyles ?? [] as $fn) {
@@ -96,7 +107,6 @@ class CellExportFormattableMixin extends CellMixin
 
     public static function exportRender(): callable
     {
-
         return function ($renderer): self {
             /** @var Cell $this */
             $this->exportRenderMethod = $renderer;
@@ -107,7 +117,6 @@ class CellExportFormattableMixin extends CellMixin
 
     public static function exportGetValue(): callable
     {
-
         return function (...$arguments) {
             /** @var Cell $this */
             $callback = $this->exportRenderMethod ?? null;
@@ -119,7 +128,6 @@ class CellExportFormattableMixin extends CellMixin
     public static function notExportable(): callable
     {
         return function (bool $notExportable = true): self {
-
             /** @var Cell $this */
             $this->exportable = !$notExportable;
 
@@ -129,7 +137,6 @@ class CellExportFormattableMixin extends CellMixin
 
     public static function isExportable(): callable
     {
-
         return function (): bool {
             /** @var Cell $this */
             return $this->exportable ?? true;

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Lintaba\OrchidTables\Exceptions;
 
@@ -11,6 +13,9 @@ class MissingPackageException extends RuntimeException implements ProvidesSoluti
 {
     public function getSolution(): Solution
     {
-        return (new BaseSolution('Missing package: ' . $this->getMessage()))->setSolutionDescription('run `$ composer install ' . $this->getMessage() . '` ');
+        $message     = 'Missing package: ' . $this->getMessage();
+        $description = 'run `$ composer install ' . $this->getMessage() . '` ';
+
+        return (new BaseSolution($message))->setSolutionDescription($description);
     }
 }

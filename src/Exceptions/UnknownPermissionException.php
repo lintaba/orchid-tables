@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Lintaba\OrchidTables\Exceptions;
 
@@ -11,8 +13,14 @@ class UnknownPermissionException extends RuntimeException implements ProvidesSol
 {
     public function getSolution(): Solution
     {
+        $description = sprintf(
+            "Add it to your orchid service provider: `%s@registerPermissions` `->addPermission('%s', __('roles.%s'))`",
+            config('platform.provider'),
+            $this->getMessage(),
+            $this->getMessage()
+        );
+
         return BaseSolution::create("Role {$this->getMessage()} was not defined. ")
-                           ->setSolutionDescription(sprintf("Add it to your orchid service provider: `%s@registerPermissions` `->addPermission('%s', __('roles.%s'))`",
-                               config('platform.provider'), $this->getMessage(), $this->getMessage()));
+                           ->setSolutionDescription($description);
     }
 }

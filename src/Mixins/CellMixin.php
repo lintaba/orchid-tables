@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Lintaba\OrchidTables\Mixins;
 
@@ -36,17 +38,32 @@ class CellMixin
                 } catch (InvalidFormatException $e) {
                     report($e);
 
-                    return new HtmlString(sprintf('<span class="text-danger">%s</span>',
-                        config('app.debug') ? $e->getMessage() : __('Invalid date')));
+                    return new HtmlString(
+                        sprintf(
+                            '<span class="text-danger">%s</span>',
+                            config('app.debug') ? $e->getMessage() : __('Invalid date')
+                        )
+                    );
                 }
 
-                $format        = $format ?: (($date->year < now()->year) ? 'Y-' : '') . 'm-d' . DataHelpers::NBSP . DataHelpers::NBSP . 'H:i';
+                $format        = $format ?: (($date->year < now()->year) ? 'Y-' : '')
+                    . 'm-d' . DataHelpers::NBSP . DataHelpers::NBSP . 'H:i';
                 $formatted     = $date->format($format);
                 $dateAtom      = $date->format(DateTimeInterface::ATOM);
-                $humanReadable = $withHumanReadable ? '<br><span class="text-muted">' . $date->diffForHumans() . '</span>' : '';
+                $humanReadable = $withHumanReadable ? sprintf(
+                    '<br><span class="text-muted">%s</span>',
+                    $date->diffForHumans()
+                ) : '';
 
-                return new HtmlString(sprintf('<time datetime="%s" title="%s">%s</time>%s', $dateAtom, $dateAtom,
-                    $formatted, $humanReadable));
+                return new HtmlString(
+                    sprintf(
+                        '<time datetime="%s" title="%s">%s</time>%s',
+                        $dateAtom,
+                        $dateAtom,
+                        $formatted,
+                        $humanReadable
+                    )
+                );
             });
 
             return $this;
@@ -55,7 +72,6 @@ class CellMixin
 
     public static function num()
     {
-
         return function (
             int $decimals = 0,
             string $suffix = null,
@@ -76,7 +92,6 @@ class CellMixin
 
     public static function limit(): callable
     {
-
         return function (int $max = 100, string $end = '...'): self {
             /** @var Cell $this */
             $column = $this->column;
@@ -86,8 +101,13 @@ class CellMixin
                     return e((string)$value);
                 }
 
-                return new HtmlString(sprintf('<span title="%s">%s</span>', e($value),
-                    e(Str::limit($value, $max, $end))));
+                return new HtmlString(
+                    sprintf(
+                        '<span title="%s">%s</span>',
+                        e($value),
+                        e(Str::limit($value, $max, $end))
+                    )
+                );
             });
 
             return $this;
@@ -113,7 +133,6 @@ class CellMixin
 
     public static function keyValues()
     {
-
         return function (int $maxDepth = 3): self {
             /** @var Cell $this */
             $column = $this->column;
@@ -155,9 +174,7 @@ class CellMixin
 
     public static function link(): callable
     {
-
         return function ($href, $segments = null): self {
-
             /** @var Cell $this */
             $column = $this->column;
             $this->render(function ($datum) use ($column, $href, $segments) {
@@ -173,8 +190,13 @@ class CellMixin
                     $content = e(data_get($datum, $column, ''));
                 }
 
-                return new HtmlString(sprintf('<a data-turbo="true" class="btn-block btn btn-link fill-cell" href="%s">%s</a>',
-                    e($href), $content));
+                return new HtmlString(
+                    sprintf(
+                        '<a data-turbo="true" class="btn-block btn btn-link fill-cell" href="%s">%s</a>',
+                        e($href),
+                        $content
+                    )
+                );
             });
 
             return $this;
@@ -183,7 +205,6 @@ class CellMixin
 
     public static function renderable(): callable
     {
-
         return function (): self {
             /** @var Cell $this */
             $column = $this->column;

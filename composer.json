@@ -5,8 +5,9 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "lintaba",
-            "email": "lintaba@gmail.com"
+            "name": "Bálint Vass",
+            "email": "lintaba@gmail.com",
+            "homepage": "https://github.com/lintaba"
         }
     ],
     "homepage": "https://github.com/lintaba/orchid-tables",
@@ -16,8 +17,9 @@
         "orchid"
     ],
     "require": {
-        "illuminate/support": "~7|~8",
-        "php": "~7.4|8.*"
+        "illuminate/support": "<=7.0",
+        "php": "^7.4 || ^8.0 || ^8.1",
+        "orchid/platform": "^10.0"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",
@@ -39,8 +41,8 @@
         "maatwebsite/excel": "*"
     },
     "scripts": {
-        "check-style": "phpcs -p --standard=PSR12 config/ src/ tests/",
-        "fix-style": "phpcbf -p --standard=PSR12 config/ src/ tests/",
+        "check-style": "vendor/bin/phpcs -p --standard=PSR12 config/ src/ tests/",
+        "fix-style": "vendor/bin/phpcbf -p --standard=PSR12 config/ src/ tests/",
         "test": "phpunit"
     },
     "extra": {

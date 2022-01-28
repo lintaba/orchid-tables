@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Lintaba\OrchidTables\Screen;
 
@@ -54,8 +56,11 @@ class TDChecklist extends TD
         $value    = $repository->getKey();
         $checkbox = CheckBox::make($this->sluggable() . '[]');
 
-        $checkbox->value($value)->class('form-check-input cb-check cb-check-' . $this->id())->checked(in_array($value,
-            old($this->sluggable(), []), false));
+        $checkbox->value($value)->class('form-check-input cb-check cb-check-' . $this->id())->checked(in_array(
+            $value,
+            old($this->sluggable(), []),
+            false
+        ));
 
         foreach ($this->renderCallbacks as [$key, $value]) {
             $checkbox->set($key, value($value, $repository));
@@ -101,5 +106,8 @@ class TDChecklist extends TD
         return null;
     }
 
-    public function isExportable(): bool { return false; }
+    public function isExportable(): bool
+    {
+        return false;
+    }
 }

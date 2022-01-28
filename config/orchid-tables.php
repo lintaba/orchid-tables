@@ -9,5 +9,5 @@ return [
         'layout' => Mixins\LayoutMixin::class,
     ],
 
-    'date_format'=>null,
+    'date_format' => null,
 ];

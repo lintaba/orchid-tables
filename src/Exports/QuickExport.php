@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Lintaba\OrchidTables\Exports;
 
@@ -9,7 +11,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Iterator;
-use Lintaba\OrchidTables\ExportStyles;
 use Maatwebsite\Excel\Concerns;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
@@ -50,12 +51,14 @@ class QuickExport extends ExportWithFormats implements Concerns\FromIterator, Co
             $rowNum++;
         }
 
-        $this->computedStyles['A1:' . Coordinate::stringFromColumnIndex(count($headers)) . '1'] = ExportStyles::header();
+        $this->computedStyles['A1:' . $this->indexToLetter(count($headers)) . '1'] = ExportStyles::FORMAT_BOLD;
     }
 
     private function getHeaders(Collection $columns): array
     {
-        return $columns->map(function ($e) { return $e->getTitle(); })->toArray();
+        return $columns->map(function ($e) {
+            return $e->getTitle();
+        })->toArray();
     }
 
     private function hackyGetColumns(Table $table)
@@ -69,8 +72,10 @@ class QuickExport extends ExportWithFormats implements Concerns\FromIterator, Co
 
     protected function isDate($value, $entry, $fieldName): bool
     {
-        return $value instanceof DateTimeInterface || $entry->hasCast($fieldName,
-                ['date', 'datetime', 'immutable_date', 'immutable_datetime']) || Str::of($fieldName)->endsWith('_at');
+        return $value instanceof DateTimeInterface || $entry->hasCast(
+            $fieldName,
+            ['date', 'datetime', 'immutable_date', 'immutable_datetime']
+        ) || Str::of($fieldName)->endsWith('_at');
     }
 
     protected function getName(): string
@@ -80,7 +85,7 @@ class QuickExport extends ExportWithFormats implements Concerns\FromIterator, Co
 
     protected function exportField(int $colIndex, int $rowNum, $col, $entry)
     {
-        $this->computedStyles[Coordinate::stringFromColumnIndex($colIndex + 1) . $rowNum] = $col->getStyle($entry);
+        $this->computedStyles[$this->indexToLetter($colIndex + 1) . $rowNum] = $col->getStyle($entry);
 
         $fieldName = $col->getName();
         $value     = $entry->getContent($fieldName) ?? data_get($entry, $fieldName);
@@ -88,7 +93,9 @@ class QuickExport extends ExportWithFormats implements Concerns\FromIterator, Co
         $value = $col->exportGetValue($value, $entry, $rowNum);
 
         if ($value instanceof Collection) {
-            $value = $value->map(function ($val) { return $val instanceof Model ? $val->id : (string)$val; })
+            $value = $value->map(function ($val) {
+                return $val instanceof Model ? $val->id : (string)$val;
+            })
                            ->implode('| ');
         }
         if ($this->isDate($value, $entry, $fieldName)) {

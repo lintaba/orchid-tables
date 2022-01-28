@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Lintaba\OrchidTables\Screen;
 
@@ -74,5 +76,15 @@ abstract class TableAdvanced extends Table
     public function rowLink($row)
     {
         return null;
+    }
+
+    /**
+     * Enable a hover state on table rows.
+     *
+     * @return bool
+     */
+    protected function hoverable(): bool
+    {
+        return true;
     }
 }
