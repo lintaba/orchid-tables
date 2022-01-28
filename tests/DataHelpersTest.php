@@ -11,15 +11,15 @@ class DataHelpersTest extends TestCase
     /** @dataProvider provideNumberFormat */
     public function testFormatNum($input, $expected, ...$args)
     {
-    /**
-     * @param string|int|float|null $val
-     * @param int                   $decimals
-     * @param string|null           $suffix
-     * @param string                $decimalSeparator
-     * @param string                $thousandsSeparator
-     *
-     * @return string
-     */
+        /**
+         * @param string|int|float|null $val
+         * @param int                   $decimals
+         * @param string|null           $suffix
+         * @param string                $decimalSeparator
+         * @param string                $thousandsSeparator
+         *
+         * @return string
+         */
         $this->assertSame($expected, DataHelpers::formatNum($input, ...$args));
     }
 

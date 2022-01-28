@@ -63,7 +63,6 @@ class QuickExport extends ExportWithFormats implements Concerns\FromIterator, Co
 
     private function hackyGetColumns(Table $table)
     {
-
         $method = new ReflectionMethod($table, 'columns');
         $method->setAccessible(true);
 
