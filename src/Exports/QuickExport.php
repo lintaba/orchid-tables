@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Lintaba\OrchidTables\Exports;
 
 use DateTimeInterface;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -14,7 +13,6 @@ use Iterator;
 use Maatwebsite\Excel\Concerns;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
-use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use ReflectionClass;
 use ReflectionMethod;
@@ -44,7 +42,6 @@ class QuickExport extends ExportWithFormats implements Concerns\FromIterator, Co
         yield array_values($headers);
         $rowNum++;
 
-
         foreach ($this->getData() as $entry) {
             yield $columns->map(function ($col, $colIndex) use ($entry, $rowNum) {
                 return $this->exportField($colIndex, $rowNum, $col, $entry);
@@ -72,27 +69,33 @@ class QuickExport extends ExportWithFormats implements Concerns\FromIterator, Co
 
     protected function isDate($value, $entry, $fieldName): bool
     {
-        return $value instanceof DateTimeInterface || Str::of($fieldName)->endsWith('_at') || ($entry instanceof Model && $entry->hasCast(
-            $fieldName,
-            ['date', 'datetime', 'immutable_date', 'immutable_datetime']
-        ));
+        return $value instanceof DateTimeInterface
+            || Str::of($fieldName)->endsWith('_at')
+            || ($entry instanceof Model && $entry->hasCast(
+                    $fieldName,
+                    ['date', 'datetime', 'immutable_date', 'immutable_datetime']
+                ));
     }
 
     protected function getName(): string
     {
-        return Str::slug((new ReflectionClass($this->builder instanceof \Illuminate\Database\Eloquent\Builder ?
-        $this->builder->getModel() : $this->builder))->getShortName());
+        return Str::slug(
+            (new ReflectionClass(
+                $this->builder instanceof \Illuminate\Database\Eloquent\Builder ?
+                    $this->builder->getModel() : $this->builder
+            ))->getShortName()
+        );
     }
 
     protected function exportField(int $colIndex, int $rowNum, $col, $entry)
     {
-        if(method_exists($col,'getStyle')) {
+        if (method_exists($col, 'getStyle')) {
             $this->computedStyles[$this->indexToLetter($colIndex + 1) . $rowNum] = $col->getStyle($entry);
         }
 
         $fieldName = $col->getName();
-        $value     = is_object($entry) && method_exists($entry,'getContent') ? $entry->getContent($fieldName) : data_get
-        ($entry, $fieldName);
+        $value = is_object($entry) && method_exists($entry, 'getContent') ?
+            $entry->getContent($fieldName) : data_get($entry, $fieldName);
 
         $value = $col->exportGetValue($value, $entry, $rowNum);
 
@@ -109,13 +112,16 @@ class QuickExport extends ExportWithFormats implements Concerns\FromIterator, Co
             $value = (string)$value;
         }
         if (is_array($value)) {
-            $value = implode(', ', array_map(static function ($v) {
-                if (is_array($v)) {
-                    $v = $v['name'] ?? Arr::first($v);
-                }
+            $value = implode(
+                ', ',
+                array_map(static function ($v) {
+                    if (is_array($v)) {
+                        $v = $v['name'] ?? Arr::first($v);
+                    }
 
-                return (string)$v;
-            }, $value));
+                    return (string)$v;
+                }, $value)
+            );
         }
 
         return $value;
