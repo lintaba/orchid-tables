@@ -72,9 +72,9 @@ class QuickExport extends ExportWithFormats implements Concerns\FromIterator, Co
         return $value instanceof DateTimeInterface
             || Str::of($fieldName)->endsWith('_at')
             || ($entry instanceof Model && $entry->hasCast(
-                    $fieldName,
-                    ['date', 'datetime', 'immutable_date', 'immutable_datetime']
-                ));
+                $fieldName,
+                ['date', 'datetime', 'immutable_date', 'immutable_datetime']
+            ));
     }
 
     protected function getName(): string
