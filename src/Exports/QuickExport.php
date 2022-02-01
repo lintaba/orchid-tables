@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Lintaba\OrchidTables\Exports;
 
 use DateTimeInterface;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -14,7 +13,6 @@ use Iterator;
 use Maatwebsite\Excel\Concerns;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
-use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use ReflectionClass;
 use ReflectionMethod;
@@ -23,9 +21,9 @@ class QuickExport extends ExportWithFormats implements Concerns\FromIterator, Co
 {
     protected $builder;
     /** @var Collection|TD[] $columns */
-    private $columns;
+    protected $columns;
 
-    public function __construct(Builder $builder, Table $table)
+    public function __construct($builder, Table $table)
     {
         $this->builder = $builder;
 
@@ -44,7 +42,7 @@ class QuickExport extends ExportWithFormats implements Concerns\FromIterator, Co
         yield array_values($headers);
         $rowNum++;
 
-        foreach ($this->builder->lazy() as $entry) {
+        foreach ($this->getData() as $entry) {
             yield $columns->map(function ($col, $colIndex) use ($entry, $rowNum) {
                 return $this->exportField($colIndex, $rowNum, $col, $entry);
             })->toArray();
@@ -54,14 +52,14 @@ class QuickExport extends ExportWithFormats implements Concerns\FromIterator, Co
         $this->computedStyles['A1:' . $this->indexToLetter(count($headers)) . '1'] = ExportStyles::FORMAT_BOLD;
     }
 
-    private function getHeaders(Collection $columns): array
+    protected function getHeaders(Collection $columns): array
     {
         return $columns->map(function ($e) {
             return $e->getTitle();
         })->toArray();
     }
 
-    private function hackyGetColumns(Table $table)
+    protected function hackyGetColumns(Table $table)
     {
         $method = new ReflectionMethod($table, 'columns');
         $method->setAccessible(true);
@@ -71,23 +69,33 @@ class QuickExport extends ExportWithFormats implements Concerns\FromIterator, Co
 
     protected function isDate($value, $entry, $fieldName): bool
     {
-        return $value instanceof DateTimeInterface || $entry->hasCast(
-            $fieldName,
-            ['date', 'datetime', 'immutable_date', 'immutable_datetime']
-        ) || Str::of($fieldName)->endsWith('_at');
+        return $value instanceof DateTimeInterface
+            || Str::of($fieldName)->endsWith('_at')
+            || ($entry instanceof Model && $entry->hasCast(
+                $fieldName,
+                ['date', 'datetime', 'immutable_date', 'immutable_datetime']
+            ));
     }
 
     protected function getName(): string
     {
-        return Str::slug((new ReflectionClass($this->builder->getModel()))->getShortName());
+        return Str::slug(
+            (new ReflectionClass(
+                $this->builder instanceof \Illuminate\Database\Eloquent\Builder ?
+                    $this->builder->getModel() : $this->builder
+            ))->getShortName()
+        );
     }
 
     protected function exportField(int $colIndex, int $rowNum, $col, $entry)
     {
-        $this->computedStyles[$this->indexToLetter($colIndex + 1) . $rowNum] = $col->getStyle($entry);
+        if (method_exists($col, 'getStyle')) {
+            $this->computedStyles[$this->indexToLetter($colIndex + 1) . $rowNum] = $col->getStyle($entry);
+        }
 
         $fieldName = $col->getName();
-        $value     = $entry->getContent($fieldName) ?? data_get($entry, $fieldName);
+        $value = is_object($entry) && method_exists($entry, 'getContent') ?
+            $entry->getContent($fieldName) : data_get($entry, $fieldName);
 
         $value = $col->exportGetValue($value, $entry, $rowNum);
 
@@ -98,21 +106,35 @@ class QuickExport extends ExportWithFormats implements Concerns\FromIterator, Co
                            ->implode('| ');
         }
         if ($this->isDate($value, $entry, $fieldName)) {
-            $value = $entry->{$fieldName} ? Date::dateTimeToExcel($entry->{$fieldName}) : '';
+            $value = $entry[$fieldName] ? Date::dateTimeToExcel($entry[$fieldName]) : '';
         }
         if ($value instanceof Model) {
             $value = (string)$value;
         }
         if (is_array($value)) {
-            $value = implode(', ', array_map(static function ($v) {
-                if (is_array($v)) {
-                    $v = $v['name'] ?? Arr::first($v);
-                }
+            $value = implode(
+                ', ',
+                array_map(static function ($v) {
+                    if (is_array($v)) {
+                        $v = $v['name'] ?? Arr::first($v);
+                    }
 
-                return (string)$v;
-            }, $value));
+                    return (string)$v;
+                }, $value)
+            );
         }
 
         return $value;
+    }
+
+    protected function getData()
+    {
+        if ($this->builder instanceof \Illuminate\Database\Eloquent\Builder) {
+            return $this->builder->lazy();
+        }
+        if (is_iterable($this->builder)) {
+            return $this->builder;
+        }
+        throw new \RuntimeException('Export needs a builder or iterable.');
     }
 }

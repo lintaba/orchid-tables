@@ -234,4 +234,57 @@ class CellMixin
             return $this;
         };
     }
+
+
+    public static function exportRender(): callable
+    {
+        return function ($renderer): self {
+            /** @var Cell $this */
+            $this->exportRenderMethod = $renderer;
+
+            return $this;
+        };
+    }
+
+    public static function exportGetValue(): callable
+    {
+        return function (...$arguments) {
+            /** @var Cell $this */
+            $callback = $this->exportRenderMethod ?? null;
+
+            return $callback === null ? $arguments[0] : $callback(...$arguments);
+        };
+    }
+
+    public static function notExportable(): callable
+    {
+        return function (bool $notExportable = true): self {
+            /** @var Cell $this */
+            $this->exportable = !$notExportable;
+
+            return $this;
+        };
+    }
+
+    public static function isExportable(): callable
+    {
+        return function (): bool {
+            /** @var Cell $this */
+            return $this->exportable ?? true;
+        };
+    }
+
+    public static function getTitle(): callable
+    {
+        return function () {
+            return $this->title;
+        };
+    }
+
+    public static function getName(): callable
+    {
+        return function () {
+            return $this->name;
+        };
+    }
 }
