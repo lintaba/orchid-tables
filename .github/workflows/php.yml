@@ -2,29 +2,55 @@ name: PHP Composer
 
 on:
   push:
-    branches: [ master ]
+    paths-ignore:
+      - '*.md'
+      - '*.xml'
   pull_request:
-    branches: [ master ]
+    paths-ignore:
+      - '*.md'
+      - '*.xml'
 
 jobs:
   build:
+    name: PHP ${{ matrix.php }}-${{ matrix.os }}
 
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+
+        php:
+          - 8.0
+          - 8.1
+
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Install PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php }}
+        ini-values: date.timezone='UTC'
+        coverage: pcov
+        tools: composer:v2
+
+    - name: Determine composer cache directory on Linux
+      if: matrix.os == 'ubuntu-latest'
+      run: echo "COMPOSER_CACHE_DIR=$(composer config cache-dir)" >> $GITHUB_ENV
 
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
 
-    - name: Cache Composer packages
-      id: composer-cache
+    - name: Cache dependencies installed with composer
       uses: actions/cache@v2
       with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        path: ${{ env.COMPOSER_CACHE_DIR }}
+        key: php${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}
         restore-keys: |
-          ${{ runner.os }}-php-
+          php${{ matrix.php }}-composer-
 
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
