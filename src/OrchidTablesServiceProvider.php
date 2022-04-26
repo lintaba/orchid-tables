@@ -76,9 +76,8 @@ class OrchidTablesServiceProvider extends ServiceProvider
         ], 'orchid-tables.config');
 
         $this->publishes([
-            __DIR__.'/../public/' => base_path('public/vendor/lintaba-orchid-tables/')
+            __DIR__ . '/../public/' => base_path('public/vendor/lintaba-orchid-tables/')
         ], ['orchid-tables-assets','laravel-assets']);
-
     }
 
     /**
@@ -90,10 +89,14 @@ class OrchidTablesServiceProvider extends ServiceProvider
     {
         View::composer('platform::app', function () {
             $this->dashboard
-                ->registerResource('scripts',
-                    mix('/js/bulkselect.js', 'vendor/lintaba-orchid-tables'))
-                ->registerResource('stylesheets',
-                    mix('/css/bulkselect.css', 'vendor/lintaba-orchid-tables'));
+                ->registerResource(
+                    'scripts',
+                    mix('/js/bulkselect.js', 'vendor/lintaba-orchid-tables')
+                )
+                ->registerResource(
+                    'stylesheets',
+                    mix('/css/bulkselect.css', 'vendor/lintaba-orchid-tables')
+                );
         });
 
         return $this;
