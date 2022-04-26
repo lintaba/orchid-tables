@@ -17,8 +17,7 @@
         "Orchid Platform"
     ],
     "require": {
-        "php": "^8.0|^8.1",
-        "illuminate/support": "^8.0|^9.0",
+        "illuminate/support": "*",
         "orchid/platform": "^12.0"
     },
     "require-dev": {
