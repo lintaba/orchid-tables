@@ -51,7 +51,7 @@ class TDChecklist extends TD
      *
      * @return Factory|Application|\Illuminate\Contracts\View\View
      */
-    public function buildTd($repository)
+    public function buildTd($repository, ?object $loop = null)
     {
         $value    = $repository->getKey();
         $checkbox = CheckBox::make($this->sluggable() . '[]');
@@ -91,7 +91,7 @@ class TDChecklist extends TD
     /**
      * @return string
      */
-    private function sluggable(): string
+    protected function sluggable(): string
     {
         return Str::slug($this->name) ?: 'checkbox';
     }

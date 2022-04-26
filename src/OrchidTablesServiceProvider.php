@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Lintaba\OrchidTables;
 
 use Exception;
@@ -72,6 +74,11 @@ class OrchidTablesServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config/orchid-tables.php' => config_path('orchid-tables.php'),
         ], 'orchid-tables.config');
+
+        $this->publishes([
+            __DIR__.'/../public/' => base_path('public/vendor/lintaba-orchid-tables/')
+        ], ['orchid-tables-assets','laravel-assets']);
+
     }
 
     /**
@@ -81,11 +88,12 @@ class OrchidTablesServiceProvider extends ServiceProvider
      */
     private function registerResources(): self
     {
-        $basepath = dirname(__DIR__);
-        $this->dashboard->addPublicDirectory('bulkselect', $basepath . '/public/');
         View::composer('platform::app', function () {
-            $this->dashboard->registerResource('scripts', orchid_mix('/js/bulkselect.js', 'bulkselect'))
-                            ->registerResource('stylesheets', orchid_mix('/css/bulkselect.css', 'bulkselect'));
+            $this->dashboard
+                ->registerResource('scripts',
+                    mix('/js/bulkselect.js', 'vendor/lintaba-orchid-tables'))
+                ->registerResource('stylesheets',
+                    mix('/css/bulkselect.css', 'vendor/lintaba-orchid-tables'));
         });
 
         return $this;

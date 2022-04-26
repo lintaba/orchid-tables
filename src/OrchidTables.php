@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Lintaba\OrchidTables;
 
 use Lintaba\OrchidTables\Exceptions\MissingPackageException;
@@ -13,10 +15,10 @@ class OrchidTables
     public function mixinTdExportFormattables(): void
     {
         if (!class_exists(Worksheet::class)) {
-            throw new MissingPackageException('PHPOffice/PhpSpreadsheet');
+            return;
         }
         if (!class_exists(Excel::class)) {
-            throw new MissingPackageException('maatwebsite/excel');
+            return;
         }
         $mix = app(CellExportFormattableMixin::class);
 
