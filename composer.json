@@ -17,6 +17,7 @@
         "Orchid Platform"
     ],
     "require": {
+        "php": "^8.0|^8.1",
         "orchid/platform": "^12.0"
     },
     "require-dev": {
