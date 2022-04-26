@@ -17,7 +17,6 @@
         "Orchid Platform"
     ],
     "require": {
-        "illuminate/support": "*",
         "orchid/platform": "^12.0"
     },
     "require-dev": {
