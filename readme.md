@@ -336,7 +336,7 @@ Makes a row clickable.
 **Example:**
 
 ```php
-use Lintaba\OrchidTables\Screen\TableAdvanced
+use Lintaba\OrchidTables\Screen\TableAdvanced;
 
 class UserTable extends TableAdvanced
 {
