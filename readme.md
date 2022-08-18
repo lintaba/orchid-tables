@@ -11,6 +11,12 @@ further useful helper methods.
 
 ## Installation
 
+### Only for Laravel 9 & Orchid 13 version
+
+Before install lintaba/orchid-tables you need to check your Laravel & Orchid Platform version. If you are using Laravel 9 & Orchid Platform 13 you need to add jQuery to the platform.php file on Orchid Platform as they show in the Orchid Upgrade Guide, this is because they removed the jQuery support from Orchid Platform, if you want more information about Orchid Upgrade Guide you can check the link below:
+
+[Orchid Upgrade Guide][https://orchid.software/en/docs/upgrade/#jquery]
+
 Via Composer
 
 ``` bash
