@@ -1,7 +1,7 @@
 {
     "private": true,
     "scripts": {
-        "dev": "NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "dev": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "watch": "NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "hot": "NODE_ENV=development webpack-dev-server --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
         "production": "NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
@@ -13,10 +13,12 @@
         "@babel/preset-env": "^7.6.0",
         "axios": "^0.21.1",
         "babel-preset-env": "^1.7.0",
+        "jquery": "^3.6.1",
         "laravel-mix": "^4.1.4",
         "node-sass": "^4.11.0"
     },
     "devDependencies": {
+        "cross-env": "^7.0.3",
         "eslint": "^5.16.0",
         "eslint-config-airbnb-base": "^13.2.0",
         "eslint-plugin-import": "^2.18.2",
