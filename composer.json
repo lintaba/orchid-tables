@@ -18,7 +18,7 @@
     ],
     "require": {
         "php": "^8.0|^8.1",
-        "orchid/platform": "^12.0"
+        "orchid/platform": "^13.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~9.0",

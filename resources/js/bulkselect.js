@@ -1,3 +1,4 @@
+window.$ = window.jQuery = require('jquery');
 $(function () {
     const bulkselect = function () {
         const $els = $('.cb-checker:not(.cb-checker-loaded)');
