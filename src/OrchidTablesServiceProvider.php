@@ -76,8 +76,8 @@ class OrchidTablesServiceProvider extends ServiceProvider
         ], 'orchid-tables.config');
 
         $this->publishes([
-            __DIR__ . '/../public/' => base_path('public/vendor/lintaba-orchid-tables/')
-        ], ['orchid-tables-assets','laravel-assets']);
+            __DIR__ . '/../public/' => public_path('vendor/lintaba-orchid-tables/')
+        ], ['orchid-tables-assets', 'laravel-assets', 'orchid-assets']);
     }
 
     /**
@@ -91,11 +91,11 @@ class OrchidTablesServiceProvider extends ServiceProvider
             $this->dashboard
                 ->registerResource(
                     'scripts',
-                    mix('/js/bulkselect.js', 'vendor/lintaba-orchid-tables')
+                    asset('vendor/lintaba-orchid-tables/js/bulkselect.js')
                 )
                 ->registerResource(
                     'stylesheets',
-                    mix('/css/bulkselect.css', 'vendor/lintaba-orchid-tables')
+                    asset('vendor/lintaba-orchid-tables/css/bulkselect.css')
                 );
         });
 
