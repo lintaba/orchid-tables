@@ -1,4 +1,5 @@
 let mix = require('laravel-mix');
+let path = require('path');
 
 let webpackConfig = {
     resolve: {
@@ -15,6 +16,6 @@ if (mix.inProduction()) {
 mix.webpackConfig(webpackConfig);
 
 mix
-    .sass('resources/sass/app.scss', 'css/bulkselect.css')
+    .css('resources/css/app.css', 'css/bulkselect.css')
     .js('resources/js/app.js', 'js/bulkselect.js')
     .setPublicPath('public');

@@ -1,35 +1,37 @@
 {
-    "private": true,
-    "scripts": {
-        "dev": "NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-        "watch": "NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-        "hot": "NODE_ENV=development webpack-dev-server --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
-        "production": "NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-        "eslint": "./node_modules/.bin/eslint resources/js/ --fix"
-    },
-    "dependencies": {
-        "@babel/plugin-proposal-class-properties": "^7.5.5",
-        "@babel/plugin-transform-block-scoping": "^7.6.0",
-        "@babel/preset-env": "^7.6.0",
-        "axios": "^0.21.1",
-        "babel-preset-env": "^1.7.0",
-        "laravel-mix": "^4.1.4",
-        "node-sass": "^4.11.0"
-    },
-    "devDependencies": {
-        "eslint": "^5.16.0",
-        "eslint-config-airbnb-base": "^13.2.0",
-        "eslint-plugin-import": "^2.18.2",
-        "resolve-url-loader": "^2.3.2",
-        "sass-loader": "^7.3.1",
-        "vue-template-compiler": "^2.6.14",
-        "stimulus": "^2.0.0"
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Lintaba\\OrchidTables\\OrchidTablesServiceProvider"
-            ]
-        }
+  "private": true,
+  "scripts": {
+    "dev": "npm run development",
+    "development": "mix",
+    "watch": "mix watch",
+    "watch-poll": "mix watch -- --watch-options-poll=1000",
+    "hot": "mix watch --hot",
+    "prod": "npm run production",
+    "production": "mix --production",
+    "eslint": "./node_modules/.bin/eslint resources/js/ --fix"
+  },
+  "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-transform-block-scoping": "^7.6.0",
+    "@babel/preset-env": "^7.6.0",
+    "axios": "^0.21.1",
+    "babel-preset-env": "^1.7.0",
+    "jquery": "^3.7.0",
+    "laravel-mix": "^6.0.49",
+    "webpack": "^5.88.2"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.2",
+    "resolve-url-loader": "^5.0.0",
+    "stimulus": "^2.0.0"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Lintaba\\OrchidTables\\OrchidTablesServiceProvider"
+      ]
     }
+  }
 }
