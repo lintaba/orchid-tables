@@ -50,6 +50,7 @@ abstract class TableAdvanced extends Table
             'hoverable'    => $this->hoverable(),
             'slug'         => $this->getSlug(),
             'onEachSide'   => $this->onEachSide(),
+            'showHeader'   => $this->hasHeader($columns, $rows),
             'title'        => $this->title,
             'rowClass'     => [$this, 'rowClass'],
             'rowLink'      => [$this, 'rowLink'],
